@@ -1,4 +1,4 @@
-package ver02;
+package ver03;
 
 public interface CustomSpecialRate {
 	

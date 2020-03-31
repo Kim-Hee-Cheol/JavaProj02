@@ -1,4 +1,4 @@
-package ver02;
+package ver03;
 
 
 public class NormalAccount extends Account{
@@ -50,9 +50,5 @@ public class NormalAccount extends Account{
 		
 		super.setowner(owner);
 	}
-	
-	
-	
-	
 	
 }

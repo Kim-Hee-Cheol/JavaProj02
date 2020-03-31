@@ -1,12 +1,14 @@
-package ver02;
+package ver03;
 
+public class HighCreditAccount extends Account{
+	
+	int gradeAdd;
 
-public class NormalAccount extends Account{
-
-	public NormalAccount(String no, String owner, int balance, int add) {
-		super(no, owner, balance, add);
-
+	public HighCreditAccount(String no, String owner, int balance, int add, int gradeAdd) {
+		super(no, owner, balance,add);
+		this.gradeAdd = gradeAdd;
 	}
+	
 	@Override
 	public String getno() {
 		
@@ -50,9 +52,15 @@ public class NormalAccount extends Account{
 		
 		super.setowner(owner);
 	}
+	public int getGradeAdd() {
+		return gradeAdd;
+	}
+	
+	public void setGradeAdd(int gradeAdd) {
+		this.gradeAdd = gradeAdd;
+	}
 	
 	
-	
-	
+
 	
 }

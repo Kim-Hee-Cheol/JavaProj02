@@ -1,5 +1,6 @@
-package ver02;
+package ver03;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class AccountManager {
@@ -105,62 +106,96 @@ public class AccountManager {
 		System.out.println("--------");
 		System.out.print("계좌번호: ");
 		String no = scanner.next();
-		System.out.print("입금액");
-		int dep = scanner.nextInt();
-		scanner.nextLine();
 		
-		if(findAccount(no)==null) {
-			if(findAccountt(no) == null) {
-				System.out.println("입력한 계좌번호를 찾지 못했습니다.");
-		}
+		System.out.print("입금액");
+		try {
+			int dep = scanner.nextInt();
+			scanner.nextLine(); 
+			if(!(dep%500==0)) {
+				System.out.println("500원단위로 입금가능합니다.");
+			}
+			if(dep<0) {
+				System.out.println("음수는 입금 할 수 없습니다.");
+			}
 			else {
-				findAccountt(no).setBalance(findAccountt(no).getBalance()+
-						findAccountt(no).getBalance()*findAccountt(no).getAdd()/100
-						+findAccountt(no).getBalance()*findAccountt(no).getGradeAdd()/100
-						+dep);
+				if(findAccount(no)==null) {
+					if(findAccount2(no) == null) {
+						System.out.println("입력한 계좌번호를 찾지 못했습니다.");
+					}
+					else {
+						findAccount2(no).setBalance(findAccount2(no).getBalance()+
+							findAccount2(no).getBalance()*
+							findAccount2(no).getAdd()/100+
+							findAccount2(no).getBalance()*
+							findAccount2(no).getGradeAdd()/100+dep);
+					}
+				}
+				else { //일반계좌 계산
+					findAccount(no).setBalance(findAccount(no).getBalance()+
+							findAccount(no).getBalance()*
+							findAccount(no).getAdd()/100+dep);
+			
+				}
 			}
 		}
-		else {
-			findAccount(no).setBalance(findAccount(no).getBalance()+
-					findAccount(no).getBalance()*findAccount(no).getAdd()/100+dep);
-		
+		catch(InputMismatchException e) {
+			System.out.println("숫자만 입력하세요.");
 		}
 	}
-	
-	
 	public void withdrawMoney() {
 		System.out.println("--------");
 		System.out.println("출금");
 		System.out.println("--------");
 		System.out.print("계좌번호: ");
 		String no = scanner.next();
+		
 		System.out.print("출금액");
-		int withd = scanner.nextInt();
-		scanner.nextLine();
-		
-		
-		if(findAccount(no) == null) {
-			if(findAccountt(no)==null) {
-				System.out.println("입력한 계좌번호를 찾지 못했습니다.");
+		try {
+			int withd = scanner.nextInt();
+			scanner.nextLine();
+			if(!(withd%1000==0)) {
+				System.out.println("1000원단위로만 출금가능합니다.");
+			}
+			if(withd<0) {
+				System.out.println("음수를 출금할 수 없습니다.");
+			}
+			if(findAccount(no).getBalance()<withd) {
+				System.out.println("잔고가 부족합니다. 금액전체를 출금할까요? 1=(YES), 2=(NO)");
+				int choice = scanner.nextInt();
+				switch(choice) {
+				case 1:
+					findAccount(no).getBalance()
+				case 2:
+					findAccount(no).getBalance();
+				}
 			}
 			else {
-				if(withd > findAccount(no).getBalance()) {
-					System.out.println("잔액보다 큰 액수입니다.");
+				if(findAccount(no) == null) {
+					if(findAccount2(no)==null) {
+						System.out.println("입력한 계좌번호를 찾지 못했습니다.");
+					}
+					else {
+						if(withd > findAccount(no).getBalance()) {
+							System.out.println("잔액보다 큰 액수입니다.");
+						}
+						else {
+							findAccount(no).setBalance(findAccount(no).getBalance()-withd);
+							System.out.println("출금되었습니다.");
+						}
+					}
 				}
 				else {
-					findAccount(no).setBalance(findAccount(no).getBalance()-withd);
-					System.out.println("출금되었습니다.");
+					if(withd > findAccount(no).getBalance()) {
+						System.out.println("잔액보다 큰 액수입니다.");
+					}
+					else {
+						findAccount(no).setBalance(findAccount(no).getBalance() - withd);
+						System.out.println("출금되었습니다.");
+					}
 				}
 			}
 		}
-		else {
-			if(withd > findAccount(no).getBalance()) {
-				System.out.println("잔액보다 큰 액수입니다.");
-			}
-			else {
-				findAccount(no).setBalance(findAccount(no).getBalance() - withd);
-				System.out.println("출금되었습니다.");
-			}
+		catch() {
 		}
 	}
 	
@@ -218,7 +253,7 @@ public class AccountManager {
 		}
 		return null;
 	}
-	public HighCreditAccount findAccountt(String no) {
+	public HighCreditAccount findAccount2(String no) {
 		 for(int i=0;i<hcAccount.length;i++) {
 		 	 if(hcAccount[i] == null) {
 		 	 		break;
