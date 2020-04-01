@@ -2,6 +2,7 @@ package ver03;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import ver03. CustomSpecialRate;;
 
 public class AccountManager {
 	static Account[] accountArray = new Account[50];
@@ -37,10 +38,10 @@ public class AccountManager {
 			System.out.print("계좌번호: ");
 			String ino = scanner.next();
 			
-			System.out.print("계좌주");
+			System.out.print("계좌주: ");
 			String iowner = scanner.next();
 			
-			System.out.print("잔고");
+			System.out.print("잔고: ");
 			int ibalance = scanner.nextInt();
 			scanner.nextLine();
 
@@ -106,16 +107,17 @@ public class AccountManager {
 		System.out.println("--------");
 		System.out.print("계좌번호: ");
 		String no = scanner.next();
-		
-		System.out.print("입금액");
+		scanner.nextLine();
+		System.out.print("입금액: ");
 		try {
 			int dep = scanner.nextInt();
-			scanner.nextLine(); 
-			if(!(dep%500==0)) {
+			
+			if(dep%500!=0) {
 				System.out.println("500원단위로 입금가능합니다.");
+				depositMoney();
 			}
-			if(dep<0) {
-				System.out.println("음수는 입금 할 수 없습니다.");
+			if(!(dep>=0)) {
+				System.out.println("음수를 입금 할 수 없습니다.");
 			}
 			else {
 				if(findAccount(no)==null) {
@@ -128,20 +130,23 @@ public class AccountManager {
 							findAccount2(no).getAdd()/100+
 							findAccount2(no).getBalance()*
 							findAccount2(no).getGradeAdd()/100+dep);
+						System.out.println("입금완료");
 					}
 				}
 				else { //일반계좌 계산
 					findAccount(no).setBalance(findAccount(no).getBalance()+
 							findAccount(no).getBalance()*
 							findAccount(no).getAdd()/100+dep);
-			
+					System.out.println("입금완료");
 				}
+				
 			}
 		}
 		catch(InputMismatchException e) {
 			System.out.println("숫자만 입력하세요.");
 		}
 	}
+	
 	public void withdrawMoney() {
 		System.out.println("--------");
 		System.out.println("출금");
@@ -149,34 +154,37 @@ public class AccountManager {
 		System.out.print("계좌번호: ");
 		String no = scanner.next();
 		
-		System.out.print("출금액");
+		System.out.print("출금액: ");
 		try {
 			int withd = scanner.nextInt();
 			scanner.nextLine();
 			if(!(withd%1000==0)) {
 				System.out.println("1000원단위로만 출금가능합니다.");
+				withdrawMoney();
 			}
-			if(withd<0) {
+			if(!(withd>=0)) {
 				System.out.println("음수를 출금할 수 없습니다.");
-			}
-			if(findAccount(no).getBalance()<withd) {
-				System.out.println("잔고가 부족합니다. 금액전체를 출금할까요? 1=(YES), 2=(NO)");
-				int choice = scanner.nextInt();
-				switch(choice) {
-				case 1:
-					findAccount(no).getBalance()
-				case 2:
-					findAccount(no).getBalance();
-				}
+				withdrawMoney();
 			}
 			else {
 				if(findAccount(no) == null) {
-					if(findAccount2(no)==null) {
+					if(findAccount2(no)==null) 
 						System.out.println("입력한 계좌번호를 찾지 못했습니다.");
-					}
+					
 					else {
 						if(withd > findAccount(no).getBalance()) {
-							System.out.println("잔액보다 큰 액수입니다.");
+							System.out.println("잔고가 부족합니다. 금액전체를 출금할까요? 1=(YES), 2=(NO)");
+							int choice = scanner.nextInt();
+							switch(choice) {
+							case 1:
+								findAccount(no).setBalance(findAccount(no).getBalance()-findAccount(no).getBalance());
+								System.out.println("금액전체가 출급처리되었습니다.");
+								break;
+							case 2:
+								findAccount(no).setBalance(findAccount(no).getBalance());
+								System.out.println("출금요청이 취소되었습니다.");
+								break;
+							}
 						}
 						else {
 							findAccount(no).setBalance(findAccount(no).getBalance()-withd);
@@ -186,7 +194,18 @@ public class AccountManager {
 				}
 				else {
 					if(withd > findAccount(no).getBalance()) {
-						System.out.println("잔액보다 큰 액수입니다.");
+						System.out.println("잔고가 부족합니다. 금액전체를 출금할까요? 1=(YES), 2=(NO)");
+						int choice = scanner.nextInt();
+						switch(choice) {
+						case 1:
+							findAccount(no).setBalance(findAccount(no).getBalance()-findAccount(no).getBalance());
+							System.out.println("금액전체가 출급처리되었습니다.");
+							break;
+						case 2:
+							findAccount(no).setBalance(findAccount(no).getBalance());
+							System.out.println("출금요청이 취소되었습니다.");
+							break;
+						}
 					}
 					else {
 						findAccount(no).setBalance(findAccount(no).getBalance() - withd);
@@ -195,7 +214,8 @@ public class AccountManager {
 				}
 			}
 		}
-		catch() {
+		catch(InputMismatchException e) {
+			System.out.println("숫자만 입력해주세요.");
 		}
 	}
 	
@@ -265,8 +285,3 @@ public class AccountManager {
 		return null;
 	}
 }
-
-	
-	
-	
-	

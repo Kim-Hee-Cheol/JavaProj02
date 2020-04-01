@@ -1,6 +1,6 @@
 package ver03;
 
-public class Account {
+public abstract class Account {
 	
 	private String no;
 	private String owner;
@@ -47,6 +47,9 @@ public class Account {
 		this.add = add;
 	}
 	
+	public void cal() {
+		
+	}
 	
 	
 	
